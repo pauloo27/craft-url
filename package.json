@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write .",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean",
     "prepare": "npm run build",
