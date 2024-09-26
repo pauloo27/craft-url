@@ -1,7 +1,7 @@
 {
-  "name": "uri-template",
+  "name": "craft-url",
   "version": "1.0.0",
-  "description": "Use template strings to safely build URIs",
+  "description": "Use template strings to safely craft URL",
   "main": "index.js",
   "scripts": {
     "format": "prettier --write .",
@@ -14,6 +14,10 @@
   },
   "keywords": [
     "uri",
+    "url",
+    "craft",
+    "query",
+    "encode",
     "template",
     "tag_function"
   ],
