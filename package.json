@@ -1,16 +1,13 @@
 {
   "name": "craft-url",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Use template strings to safely craft URL",
   "main": "dist/url.js",
   "types": "dist/url.d.ts",
-  "module": "lib/url.js",
+  "module": "dist/url.js",
   "files": [
     "dist/"
   ],
-  "exports": {
-    ".": "./lib/url.js"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/pauloo27/craft-url"
