@@ -1,0 +1,15 @@
+# Ignore pnpm lock file
+pnpm-lock.yaml
+
+# Other common files to ignore
+node_modules
+dist
+build
+coverage
+
+# Ignore any minified files
+*.min.js
+
+# Ignore generated files
+*.generated.*
+
