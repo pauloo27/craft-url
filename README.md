@@ -14,21 +14,21 @@ using template strings.
 ## Usage
 
 ```js
-import { uri, raw } from 'craft-url';
+import { urlify, raw } from 'craft-url';
 
 // Basic usage
 const username = 'john doe';
-const encodedUri = uri`/users/${username}`;
+const encodedUri = urlify`/users/${username}`;
 console.log(encodedUri); // Output: "/users/john%20doe"
 
 // Query parameters
 const filter = 'active&new';
-const encodedUriWithQuery = uri`/users?filter=${filter}`;
+const encodedUriWithQuery = urlify`/users?filter=${filter}`;
 console.log(encodedUriWithQuery); // Output: "/users?filter=active%26new"
 
 // Using raw values
 const baseUrl = 'https://api.example.com';
-const encodedUriWithRaw = uri`${raw(baseUrl)}/users/${username}`;
+const encodedUriWithRaw = urlify`${raw(baseUrl)}/users/${username}`;
 console.log(encodedUriWithRaw); // Output: "https://api.example.com/users/john%20doe"
 
 
@@ -36,18 +36,18 @@ console.log(encodedUriWithRaw); // Output: "https://api.example.com/users/john%2
 const host = 'localhost';
 const user = 'user';
 const password = 'p@ass/word';
-const connStr = uri`postgresql://${user}:${password}@${host}`;
+const connStr = urlify`postgresql://${user}:${password}@${host}`;
 console.log(connStr);  // Output: "postgresql://user:p%40ass%2Fword@localhost"
 ```
 
 ## API
 
-### `uri`
+### `urlify`
 
 A tagged template function that safely encodes URI components.
 
 ```javascript
-uri`/path/${param}?query=${queryParam}`
+urlify`/path/${param}?query=${queryParam}`
 ```
 
 ### `raw`
