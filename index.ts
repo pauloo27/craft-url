@@ -1,5 +1,5 @@
 class RawValue {
-  constructor(public readonly value: unknown) {}
+  constructor(public readonly raw: unknown) {}
 }
 
 export function raw(value: unknown): RawValue {
@@ -17,7 +17,7 @@ export function uri(strings: TemplateStringsArray, ...values: any[]): string {
     if (valueIdx < values.length) {
       const value = values[valueIdx++];
       builder.push(
-        value instanceof RawValue ? value.value :encodeURIComponent(value),
+        value instanceof RawValue ? value.raw :encodeURIComponent(value),
       )
     }
   }
