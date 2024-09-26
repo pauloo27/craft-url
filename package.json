@@ -2,7 +2,19 @@
   "name": "craft-url",
   "version": "0.0.1",
   "description": "Use template strings to safely craft URL",
-  "main": "index.js",
+  "main": "dist/url.js",
+  "types": "dist/url.d.ts",
+  "module": "lib/url.js",
+  "files": [
+    "dist/"
+  ],
+  "exports": {
+    ".": "./lib/url.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pauloo27/craft-url"
+  },
   "scripts": {
     "format": "prettier --write .",
     "build": "tsc -p tsconfig.build.json",
