@@ -1,6 +1,6 @@
 {
   "name": "craft-url",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Use template strings to safely craft URL",
   "main": "dist/url.js",
   "types": "dist/url.d.ts",
