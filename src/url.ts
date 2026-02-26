@@ -58,16 +58,16 @@ export function urlify(
 ): string {
   // use a array as "string builder" because, guess what, js std::lib sucks!
   const builder = new Array(strings.length + values.length);
+  let builderIdx = 0;
 
   let valueIdx = 0;
 
   for (const str of strings) {
-    builder.push(str);
+    builder[builderIdx++] = str;
     if (valueIdx < values.length) {
       const value = values[valueIdx++];
-      builder.push(
-        value instanceof RawValue ? value.raw : encodeURIComponent(value),
-      );
+      builder[builderIdx++] =
+        value instanceof RawValue ? value.raw : encodeURIComponent(value);
     }
   }
 
