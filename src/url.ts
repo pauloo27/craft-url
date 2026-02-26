@@ -9,7 +9,7 @@
  * const endpoint = urlify`${baseUrl}/users/${userId}`;
  */
 class RawValue {
-  constructor(public readonly raw: unknown) {}
+  constructor(public readonly raw: string | number | boolean) {}
 }
 
 /**
@@ -30,7 +30,7 @@ class RawValue {
  * const baseUrl = raw("/api/v1");
  * const endpoint = urlify`${baseUrl}/users`;
  */
-export function raw(value: unknown): RawValue {
+export function raw(value: string | number | boolean): RawValue {
   return new RawValue(value);
 }
 
@@ -54,7 +54,7 @@ export function raw(value: unknown): RawValue {
  */
 export function urlify(
   strings: TemplateStringsArray,
-  ...values: any[]
+  ...values: (string | number | boolean | RawValue)[]
 ): string {
   // use a array as "string builder" because, guess what, js std::lib sucks!
   const builder = new Array(strings.length + values.length);

@@ -98,6 +98,20 @@ describe("should support raw values", () => {
   });
 });
 
+describe("should handle different value types", () => {
+  it("string", () => {
+    expect(urlify`/users/${"hello world"}`).toBe("/users/hello%20world");
+  });
+
+  it("number", () => {
+    expect(urlify`/users/${42}`).toBe("/users/42");
+  });
+
+  it("boolean", () => {
+    expect(urlify`/users?active=${true}`).toBe("/users?active=true");
+  });
+});
+
 describe("should support urls with host", () => {
   it("not break the literal strings", () => {
     expect(urlify`https://api.example.com/v1/users`).toBe(
