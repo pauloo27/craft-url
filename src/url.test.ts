@@ -2,127 +2,94 @@ import { expect, it, describe } from "vitest";
 import { raw, urlify } from "./url";
 
 describe("should properly escape path params", () => {
-  it("not change simple strings", () => {
-    const param = "hello";
-    expect(urlify`/users/${param}`).toBe("/users/hello");
-  });
-
-  it("with spaces", () => {
-    const param = "hello world";
-    expect(urlify`/users/${param}`).toBe("/users/hello%20world");
-  });
-
-  it("with /", () => {
-    const param = "hello/world";
-    expect(urlify`/users/${param}`).toBe("/users/hello%2Fworld");
+  it.each([
+    ["not change simple strings", "hello", "/users/hello"],
+    ["with spaces", "hello world", "/users/hello%20world"],
+    ["with /", "hello/world", "/users/hello%2Fworld"],
+  ])("%s", (_, param, expected) => {
+    expect(urlify`/users/${param}`).toBe(expected);
   });
 });
 
 describe("should properly escape query params", () => {
-  it("not change simple strings", () => {
-    const param = "hello";
-    expect(urlify`/users?name=${param}`).toBe("/users?name=hello");
-  });
-
-  it("with spaces", () => {
-    const param = "hello world";
-    expect(urlify`/users?name=${param}`).toBe("/users?name=hello%20world");
-  });
-
-  it("with /", () => {
-    const param = "hello/world";
-    expect(urlify`/users?name=${param}`).toBe("/users?name=hello%2Fworld");
-  });
-
-  it("with &", () => {
-    const param = "hello&world";
-    expect(urlify`/users?search=${param}`).toBe("/users?search=hello%26world");
-  });
-
-  it("with =", () => {
-    const param = "hello=world";
-    expect(urlify`/users?search=${param}`).toBe("/users?search=hello%3Dworld");
+  it.each([
+    ["not change simple strings", "hello", "/users?q=hello"],
+    ["with spaces", "hello world", "/users?q=hello%20world"],
+    ["with /", "hello/world", "/users?q=hello%2Fworld"],
+    ["with &", "hello&world", "/users?q=hello%26world"],
+    ["with =", "hello=world", "/users?q=hello%3Dworld"],
+  ])("%s", (_, param, expected) => {
+    expect(urlify`/users?q=${param}`).toBe(expected);
   });
 });
 
 describe("should properly escape query params with multiple values", () => {
-  it("mixed path and query params", () => {
-    const group = "admin/manager";
-    const filter = "active&inactive";
-
-    expect(urlify`/users/${group}?filter=${filter}`).toBe(
+  it.each([
+    [
+      "mixed path and query params",
+      () => urlify`/users/${"admin/manager"}?filter=${"active&inactive"}`,
       "/users/admin%2Fmanager?filter=active%26inactive",
-    );
-  });
-
-  it("multiple query params", () => {
-    const filter = "active&inactive";
-    const sort = "name=asc";
-
-    expect(urlify`/users?filter=${filter}&sort=${sort}`).toBe(
+    ],
+    [
+      "multiple query params",
+      () => urlify`/users?filter=${"active&inactive"}&sort=${"name=asc"}`,
       "/users?filter=active%26inactive&sort=name%3Dasc",
-    );
-  });
-
-  it("multiple path params", () => {
-    const group = "admin/manager";
-    const user = "john.doe";
-
-    expect(urlify`/users/${group}/${user}`).toBe(
+    ],
+    [
+      "multiple path params",
+      () => urlify`/users/${"admin/manager"}/${"john.doe"}`,
       "/users/admin%2Fmanager/john.doe",
-    );
+    ],
+  ])("%s", (_, build, expected) => {
+    expect(build()).toBe(expected);
   });
 });
 
 describe("should support raw values", () => {
-  it("not escape raw values in path", () => {
-    const baseURL = "/api/v1";
-
-    expect(urlify`${raw(baseURL)}/users`).toBe("/api/v1/users");
-  });
-
-  it("not escape raw values in query", () => {
-    const filter = `filter=active&sort=name`;
-    expect(urlify`/users?${raw(filter)}`).toBe(
+  it.each([
+    [
+      "not escape raw values in path",
+      () => urlify`${raw("/api/v1")}/users`,
+      "/api/v1/users",
+    ],
+    [
+      "not escape raw values in query",
+      () => urlify`/users?${raw("filter=active&sort=name")}`,
       "/users?filter=active&sort=name",
-    );
-  });
-
-  it("not escape raw values in path and query", () => {
-    const baseURL = "/api/v1";
-    const filter = `filter=active&sort=name`;
-
-    expect(urlify`${raw(baseURL)}/users?${raw(filter)}`).toBe(
+    ],
+    [
+      "not escape raw values in path and query",
+      () => urlify`${raw("/api/v1")}/users?${raw("filter=active&sort=name")}`,
       "/api/v1/users?filter=active&sort=name",
-    );
+    ],
+  ])("%s", (_, build, expected) => {
+    expect(build()).toBe(expected);
   });
 });
 
 describe("should handle different value types", () => {
-  it("string", () => {
-    expect(urlify`/users/${"hello world"}`).toBe("/users/hello%20world");
-  });
-
-  it("number", () => {
-    expect(urlify`/users/${42}`).toBe("/users/42");
-  });
-
-  it("boolean", () => {
-    expect(urlify`/users?active=${true}`).toBe("/users?active=true");
+  it.each([
+    ["string", () => urlify`/users/${"hello world"}`, "/users/hello%20world"],
+    ["number", () => urlify`/users/${42}`, "/users/42"],
+    ["boolean", () => urlify`/users?active=${true}`, "/users?active=true"],
+  ])("%s", (_, build, expected) => {
+    expect(build()).toBe(expected);
   });
 });
 
 describe("should support urls with host", () => {
-  it("not break the literal strings", () => {
-    expect(urlify`https://api.example.com/v1/users`).toBe(
+  it.each([
+    [
+      "not break the literal strings",
+      () => urlify`https://api.example.com/v1/users`,
       "https://api.example.com/v1/users",
-    );
-  });
-
-  it("not break with path params", () => {
-    const param = "hello";
-    expect(urlify`https://api.example.com/v1/users/${param}`).toBe(
+    ],
+    [
+      "not break with path params",
+      () => urlify`https://api.example.com/v1/users/${"hello"}`,
       "https://api.example.com/v1/users/hello",
-    );
+    ],
+  ])("%s", (_, build, expected) => {
+    expect(build()).toBe(expected);
   });
 });
